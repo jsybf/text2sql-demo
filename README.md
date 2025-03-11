@@ -70,8 +70,8 @@ You can start using app just right after that.
 
 # Contributors
 
-- FireFlyTy ([@FireFlyTy](https://github.com/FireFlyTy))
-- kkirikov ([@kkirikov](https://github.com/kkirikov))
+- Tetyana Hladkykh: FireFlyTy ([@FireFlyTy](https://github.com/FireFlyTy))
+- Kirill Kirikov: kkirikov ([@kkirikov](https://github.com/kkirikov))
 
 ### Need AI Agent? 
 Contact sales@datrics.ai
