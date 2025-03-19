@@ -2,6 +2,9 @@
 
 Datrics Text-to-SQL engine designed to understand databases effortlessly, turning plain English into accurate SQL queries. Our solution emphasizes advanced Retrieval-Augmented Generation (RAG) techniques rather than simply providing frameworks for developers to fine-tune models themselves and can work out-of-the-box.
 
+# Whitepaper
+[ResearchGate](https://www.researchgate.net/publication/389944067_Datrics_Text2SQL_A_Framework_for_Natural_Language_to_SQL_Query_Generation)
+
 ## What makes us stand out?
 1. Semantic Layer: 
 We leverage your database documentation and examples, extracting meaningful concepts to enhance precision.
