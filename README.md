@@ -1,4 +1,4 @@
-# Datrics Text2SQL
+# Datrics Text2SQL: Open-Source, High-Accuracy Natural Language to SQL Conversion
 
 Datrics Text-to-SQL engine designed to understand databases effortlessly, turning plain English into accurate SQL queries. Our solution emphasizes advanced Retrieval-Augmented Generation (RAG) techniques rather than simply providing frameworks for developers to fine-tune models themselves and can work out-of-the-box.
 
