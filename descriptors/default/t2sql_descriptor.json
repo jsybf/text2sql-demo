@@ -1,22 +1,17 @@
 {
   "router_model_list": [
     {
-      "model_name": "gpt-4o",
+      "model_name": "deepseek_r1",
       "litellm_params": {
-        "model": "gpt-4o",
-        "api_key": "<your api key goes here>"
-      }
-    },
-    {
-      "model_name": "o3-mini",
-      "litellm_params": {
-        "model": "o3-mini",
-        "api_key": "<your api key goes here>"
+          "model": "fireworks_ai/accounts/fireworks/models/deepseek-r1",
+          "api_key": "<your api key goes here>"
       }
     }
   ],
   "open_ai_key": "<your api key goes here>",
-  "model": "gpt-4o",
+  "model_sql": "deepseek_r1",
+  "model_table_selection": "deepseek_r1",
+  "model_supports_reasoning": false,
   "descriptors_path": "descriptors/default",
   "docs_md_folder": "training_data_storage/md_docs",
   "docs_json_folder": "training_data_storage/json_docs",

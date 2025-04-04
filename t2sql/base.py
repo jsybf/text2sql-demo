@@ -105,7 +105,7 @@ class BaseText2SQLAgent(ABC):
 
     @property
     def default_model(self) -> str:
-        return self._config["model"]
+        return self._config["model_sql"]
 
     @property
     def config(self):
@@ -682,16 +682,13 @@ class BaseText2SQLAgent(ABC):
 
         messages = [{"role": "user", "content": m["content"]} for m in base_messages]
 
-        if not with_reasoning:
-            n = 1 if reasoning_model == "simple" else n
-            return await self._extract_tables_without_reasoning(messages, n)
-
-        if reasoning_model in ["o3-mini", "o1", "o1-mini"]:
+        try:
             tables = await self._extract_with_openai(
                 messages, reasoning_model, reasoning_effort
             )
-        else:
-            raise ValueError(f"Unsupported reasoning model: {reasoning_model}")
+        except Exception as e:
+            n = 1 if reasoning_model == "simple" else n
+            return await self._extract_tables_without_reasoning(messages, n)
 
         return tables
 
@@ -836,7 +833,7 @@ class BaseText2SQLAgent(ABC):
         for x in tables_query:
             raw_tables = raw_tables + x
 
-        tbls = await self.get_tables_from_business_rules(question=norm_question)
+        tbls = await self.get_tables_from_business_rules(question=norm_question, model=reasoning_model, reasoning_effort=reasoning_effort)
         raw_tables = np.unique(raw_tables + tbls)
         tbl_descr, _tables = await self.return_table_docs(raw_tables)
 
