@@ -6,7 +6,9 @@ from t2sql.base import BaseText2SQLAgent
 async def make_answer(query: str, agent: BaseText2SQLAgent) -> str:
     logger.info(f"[{agent._descriptor_folder}] Extracting sql for query: {query}...")
 
-    sql, _ = await agent.make_sql(query)
+    sql, _ = await agent.make_sql(query,
+                                  reasoning_model_sql=agent.config.get("model_sql"),
+                                  reasoning_model_table=agent.config.get("model_table_selection"))
 
     logger.info(f"[{agent._descriptor_folder}] Generated sql: {sql}")
 
