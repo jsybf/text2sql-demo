@@ -1,83 +1,42 @@
-# Datrics Text2SQL: Open-Source, High-Accuracy Natural Language to SQL Conversion
-
-Datrics Text-to-SQL engine designed to understand databases effortlessly, turning plain English into accurate SQL queries. Our solution emphasizes advanced Retrieval-Augmented Generation (RAG) techniques rather than simply providing frameworks for developers to fine-tune models themselves and can work out-of-the-box.
-
-# Whitepaper
-[ResearchGate](https://www.researchgate.net/publication/389944067_Datrics_Text2SQL_A_Framework_for_Natural_Language_to_SQL_Query_Generation)
-
-## What makes us stand out?
-1. Semantic Layer: 
-We leverage your database documentation and examples, extracting meaningful concepts to enhance precision.
-
-2. Smart Example Matching: 
-While other solutions struggle with unseen tables, our advanced search and reranking capabilities intelligently generalize from similar examples, ensuring reliable query generation.
-
-3. Instant Documentation: 
-Connect your database and instantly generate detailed documentation—no manual effort required.
-
-4. Flexible AI Integration: 
-Easily integrate with existing LLMs for enhanced, customized performance.
-
-# Dependencies
-
-Text2SQL agent uses chromadb to store vector embeddings and it relies on OpenAI Embeddings function
-Support for other LLMs and Vector DBs is coming soon.
-
-# Prerequsites
-
-python >= 3.11
-docker for running local test database
-
-# Getting started
-
-### Create virtual environment
-
+# requirements
+- 3.11 <= python
+- duckdb(optional. for transforming json files)
+# how to setup and run
+## step1: config t2sql_descriptor.json
+notion에 업로드한 t2sql_descritpr.sjon gist를 ./descriptors/default/t2sql_descriptor.json으로 복사헤줍시다.
+## step2: convert sql example provided by dtol to projects format
+dtol에서 제공한 json포멧이 프로젝트의 answer-query쌍 json format과 일치하지 않기 때문에
+변형이 필요함. 저는 간단하게 duckdb를 활용했습니다.
+```bash
+mkdir -p ./training_data_storage/examples
+duckdb
+# duckdb에서 아래의 쿼리를 실행. duckdb에서 나오는건 ctrl + d
+    COPY(
+        SELECT
+            messages->>'$[1].content' AS question,
+            messages->>'$[2].content' AS sql,
+        FROM
+            'examples/field_process_claim_data.jsonl'
+        UNION
+        SELECT
+            messages->>'$[1].content' AS question,
+            messages->>'$[2].content' AS sql,
+        FROM
+            'examples/qm_vndr_qlty_data.jsonl'
+    ) TO 'training_data_storage/examples/examples.json' (FORMAT json, ARRAY true);
+```
+## step3: install python dependencies
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install .
 ```
-
-### Set-up LLM
-
-1. open `descriptors/default/t2sql_descriptor.json` with any text editor
-2. set litellm settings to [router_model_list](https://docs.litellm.ai/docs/routing#quick-start)
-
-
-# Run streamlit application
-
+## step4.1: run in cli
+train??? or ingress??? data to chroma_db(vectordb)
 ```bash
-docker-compose up -d
-streamlit run main.py
+python ./cli_ingress.py
 ```
-
-In the app: open "Documentation" tab and click on "Run schema indexing" - this will create the semantic layer of the database
-You can start asking question right after it's finished.
-
-# Connecting to your database
-
-open descriptors/default/t2sql_descriptor.json with any text editor
-set access to your database "db" object
-in case if you needd to use ssh tunnel, add ssh_tunnel to your descriptor:
-
-```json
-"ssh_tunnel": {
-    "username": "",
-    "private_key_path": "",    
-}
+run text2sql
+```bash
+python ./cli_infer.py <<< "자연어 쿼리"
 ```
-
-You can provide the documentation in the "documentation" tab or click on "Run schema indexing" - this will create the semantic layer of the database.
-
-You can start using app just right after that.
-
-# Contributors
-
-- Tetyana Hladkykh: FireFlyTy ([@FireFlyTy](https://github.com/FireFlyTy))
-- Kirill Kirikov: kkirikov ([@kkirikov](https://github.com/kkirikov))
-
-### Need AI Agent? 
-Contact sales@datrics.ai
-
-### Want to support project? 
-Contact kk@datrics.ai 
